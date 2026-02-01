@@ -2,10 +2,10 @@
 
 This repository documents how to deploy a private homelab using Docker with:
 
-* **Nextcloud All-in-One (AIO)** for cloud storage and collaboration
-* **Jellyfin** for media streaming
-* **Samba** for network file access (Windows/macOS/Linux)
-* **tsbridge** to securely expose services over **Tailscale**
+* **[Nextcloud All-in-One (AIO)](https://github.com/nextcloud/all-in-one)** for cloud storage and collaboration
+* **[Jellyfin](https://jellyfin.org/docs/general/installation/container/)** for media streaming
+* **[Samba](https://github.com/dockur/samba)** for network file access (Windows/macOS/Linux)
+* **[tsbridge](https://github.com/jtdowney/tsbridge)** to securely expose services over **Tailscale**
 * **No public ports** and **no reverse proxy on the host**
 
 All external access is restricted to devices on your Tailnet.
@@ -16,7 +16,7 @@ All external access is restricted to devices on your Tailnet.
 
 * Linux server (Tested on Ubuntu 24.04.3 LTS)
 * Docker + Docker Compose installed
-* A Tailscale account
+* [A Tailscale account](https://tailscale.com/)
 * A Tailscale OAuth client with tag permissions
 
 ---
@@ -43,7 +43,7 @@ All external access is restricted to devices on your Tailnet.
 
 ## Step 1 — Install Docker
 
-If Docker is not installed:
+If [Docker](https://docs.docker.com/engine/install/ubuntu/) is not installed:
 
 First, install the Docker apt repository:
 ```bash

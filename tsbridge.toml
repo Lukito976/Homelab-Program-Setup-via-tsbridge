@@ -1,0 +1,15 @@
+[tailscale]
+oauth_client_id = "YOUR_OAUTH_CLIENT_ID"
+oauth_client_secret = "YOUR_OAUTH_CLIENT_SECRET"
+state_dir = "/var/lib/tsbridge"
+default_tags = ["tag:tsbridge"]
+
+[[services]]
+name = "jellyfin"
+backend_addr = "http://jellyfin:8096"
+tags = ["tag:tsbridge"]
+
+[[services]]
+name = "nextcloud"
+backend_addr = "http://nextcloud-aio-apache:11000"
+tags = ["tag:tsbridge"]

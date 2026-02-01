@@ -1,0 +1,61 @@
+services:
+  tsbridge:
+    image: ghcr.io/jtdowney/tsbridge:latest
+    container_name: tsbridge
+    command: ["-config", "/config/tsbridge.toml"]
+    volumes:
+      - tsbridge-state:/var/lib/tsbridge
+      - /absolute/path/to/homelab/tsbridge.toml:/config/tsbridge.toml:ro
+    restart: unless-stopped
+    networks:
+      - default
+      - nextcloud-aio
+
+  nextcloud-aio-mastercontainer:
+    image: nextcloud/all-in-one:latest
+    container_name: nextcloud-aio-mastercontainer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - nextcloud_aio_mastercontainer:/mnt/docker-aio-config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      APACHE_PORT: 11000
+      APACHE_IP_BINDING: 0.0.0.0
+      SKIP_DOMAIN_VALIDATION: "true"
+
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    volumes:
+      - /media/myfiles:/media
+      - jellyfin_config:/config
+      - jellyfin_cache:/cache
+
+  samba:
+    image: dockurr/samba:latest
+    container_name: samba
+    restart: unless-stopped
+    ports:
+      - "445:445"
+    volumes:
+      - /media/myfiles:/storage
+    environment:
+      USER: "SAMBA_USERNAME"
+      PASS: "SAMBA_PASSWORD"
+      NAME: "myfiles"
+
+volumes:
+  nextcloud_aio_mastercontainer:
+    external: true
+    name: nextcloud_aio_mastercontainer
+  tsbridge-state:
+  jellyfin_config:
+  jellyfin_cache:
+
+networks:
+  nextcloud-aio:
+    external: true
+    name: nextcloud-aio

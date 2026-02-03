@@ -14,9 +14,9 @@ All external access is restricted to devices on your Tailnet.
 
 ## Prerequisites
 
-* Linux server (Tested on Ubuntu 24.04.3 LTS)
-* Docker + Docker Compose installed
-* [A Tailscale account](https://tailscale.com/)
+* Linux server (Tested on [Ubuntu 24.04.3 LTS](https://ubuntu.com/download/server))
+* [Docker](https://docs.docker.com/engine/install/ubuntu/) + Docker Compose installed
+* A [Tailscale](https://tailscale.com/) account
 * A Tailscale OAuth client with tag permissions
 
 ---
@@ -43,7 +43,7 @@ All external access is restricted to devices on your Tailnet.
 
 ## Step 1 — Install Docker
 
-If [Docker](https://docs.docker.com/engine/install/ubuntu/) is not installed:
+If Docker is not installed:
 
 First, install the Docker apt repository:
 ```bash
@@ -322,7 +322,7 @@ Movies
 ```
 Shows
 ├── True Detective [imdbid-tt2356777]
-│   ├── Season 01
+│   └── Season 01
 │       ├── True Detective S01E01.mkv
 │       └── True Detective S01E02.mkv
 └── Landman [imdbid-tt14186672]

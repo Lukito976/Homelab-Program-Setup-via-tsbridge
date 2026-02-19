@@ -82,8 +82,6 @@ docker compose version
 docker run hello-world
 ```
 
----
-
 ## Step 2 — Create the Media Directory
 
 All media for **Samba** & **Jellyfin** lives here:
@@ -93,16 +91,12 @@ sudo mkdir -p /media/myfiles
 sudo chown -R 1000:1000 /media/myfiles
 ```
 
----
-
 ## Step 3 — Create the Homelab Directory
 
 ```bash
 mkdir -p ~/homelab
 cd ~/homelab
 ```
-
----
 
 ## Step 4 — Create the Nextcloud AIO Master Volume
 
@@ -114,8 +108,6 @@ docker volume create nextcloud_aio_mastercontainer
 
 Do **not** rename it.
 Do **not** let Docker Compose auto-prefix it.
-
----
 
 ## Step 5 — Configure Tailscale ACLs
 
@@ -139,7 +131,6 @@ Go to **Settings → Trust Credentials → + Credential (make sure to give it re
 
 Save the details of the key to populate the required files.
 
----
 
 ## Step 6 — Create `tsbridge.toml`
 
@@ -166,8 +157,6 @@ name = "nextcloud"
 backend_addr = "http://nextcloud-aio-apache:11000"
 tags = ["tag:tsbridge"]
 ```
-
----
 
 ## Step 7 — Create `docker-compose.yml`
 
@@ -241,8 +230,6 @@ networks:
     name: nextcloud-aio
 ```
 
----
-
 ## Step 8 — Start the Stack
 
 ```bash
@@ -269,14 +256,14 @@ From a browser on the LAN:
   https://<SERVER_LAN_IP>:8080
   ```
 
-* Accept the certificate warning
-* When prompted for a domain, enter:
+Accept the certificate warning
+When prompted for a domain, enter:
 
   ```
   nextcloud.<tailnet>.ts.net
   ```
   
-* Complete setup and wait for all containers to start
+Complete setup and wait for all containers to start
 
 ---
 
@@ -292,6 +279,8 @@ When prompted to enter login credentials, use the ones that you configured earli
 
 Files written here appear immediately in Jellyfin; for ease of use, create a **Movies** and a **Shows** folder.
 
+---
+
 ## Program Setup: Jellyfin
 
 From a browser connected to your tailnet:
@@ -300,14 +289,14 @@ From a browser connected to your tailnet:
   https://jellyfin.<tailnet>.ts.net
   ```
 
-* When prompted for the server name, enter your Ubuntu server name:
+When prompted for the server name, enter your Ubuntu server name:
 
   ```
   Ubuntu-home-server-example
   ```
-* Complete setup and map libraries to individual media folders (select the specific folder you created earlier in your Samba drive for each type of library).
+Complete setup and map libraries to individual media folders (select the specific folder you created earlier in your Samba drive for each type of library).
 
-* Movies should be organized into individual folders for each movie. See below for an example:
+Movies should be organized into individual folders for each movie. See below for an example:
   
 ```
 Movies
@@ -317,7 +306,7 @@ Movies
     └── Goodfellas [imdbid-tt0099685].mkv 
 ```
 
-* Shows should be organized into series folders, then into season folders under each series. See below for an example:
+Shows should be organized into series folders, then into season folders under each series. See below for an example:
   
 ```
 Shows
@@ -333,4 +322,3 @@ Shows
         ├── Landman S02E01.mkv
         └── Landman S02E02.mkv
 ```
-

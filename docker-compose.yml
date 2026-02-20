@@ -52,8 +52,7 @@ services:
     ports:
       - "445:445"
     volumes:
-      - /media/media-library:/external:rw
-      - /srv/laptop-storage:/laptop-storage:rw
+      - /media/media-library:/medialibrary:rw
       - ./smb.conf:/etc/samba/smb.conf:ro
     environment:
       USER: "SAMBA_USERNAME"      # Replace with your desired Samba username

@@ -3,13 +3,21 @@ services:
     image: ghcr.io/jtdowney/tsbridge:latest
     container_name: tsbridge
     command: ["-config", "/config/tsbridge.toml"]
+    cap_add:
+      - NET_ADMIN     # Required: Tailscale needs to manage network interfaces
+      - SYS_MODULE    # Required: load kernel modules if needed
+    devices:
+      - /dev/net/tun:/dev/net/tun   # Required: Tailscale TUN device
     volumes:
       - tsbridge-state:/var/lib/tsbridge
-      - /absolute/path/to/homelab/tsbridge.toml:/config/tsbridge.toml:ro
+      - /home/lukito/homelab/tsbridge.toml:/config/tsbridge.toml:ro
     restart: unless-stopped
     networks:
       - default
-      - nextcloud-aio
+      - nextcloud-aio   # Must be on this network to reach nextcloud-aio-apache by hostname
+    depends_on:
+      - nextcloud-aio-mastercontainer
+      - jellyfin
 
   nextcloud-aio-mastercontainer:
     image: nextcloud/all-in-one:latest
@@ -21,8 +29,8 @@ services:
       - nextcloud_aio_mastercontainer:/mnt/docker-aio-config
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
-      APACHE_PORT: 11000
-      APACHE_IP_BINDING: 0.0.0.0
+      APACHE_PORT: "11000"
+      APACHE_IP_BINDING: "0.0.0.0"
       SKIP_DOMAIN_VALIDATION: "true"
 
   jellyfin:
@@ -30,9 +38,12 @@ services:
     container_name: jellyfin
     restart: unless-stopped
     volumes:
-      - /media/myfiles:/media
+      - /media/media-library:/media
+      - /srv/laptop-storage:/laptop-storage
       - jellyfin_config:/config
       - jellyfin_cache:/cache
+    networks:
+      - default
 
   samba:
     image: dockurr/samba:latest
@@ -41,11 +52,14 @@ services:
     ports:
       - "445:445"
     volumes:
-      - /media/myfiles:/storage
+      - /media/media-library:/external:rw
+      - /srv/laptop-storage:/laptop-storage:rw
+      - ./smb.conf:/etc/samba/smb.conf:ro
     environment:
-      USER: "SAMBA_USERNAME"
-      PASS: "SAMBA_PASSWORD"
-      NAME: "myfiles"
+      USER: "SAMBA_USERNAME"      # Replace with your desired Samba username
+      PASS: "SAMBA_PASSWORD"      # Replace with your desired Samba password
+      UID: "1000"
+      GID: "1000"
 
 volumes:
   nextcloud_aio_mastercontainer:
@@ -56,6 +70,8 @@ volumes:
   jellyfin_cache:
 
 networks:
+  # This network is created by Nextcloud AIO on first boot.
+  # You MUST create it manually before running docker compose up (see Step 5 in README).
   nextcloud-aio:
     external: true
     name: nextcloud-aio
